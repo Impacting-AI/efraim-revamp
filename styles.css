@@ -322,6 +322,7 @@ h4 {
 
 .hero__image {
   object-fit: cover;
+  filter: brightness(0.78) saturate(0.96);
 }
 
 .hero__fade {
