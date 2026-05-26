@@ -700,8 +700,30 @@ h4 {
   background: #171717;
 }
 
-.technology__image img {
-  filter: grayscale(0.25) contrast(1.05);
+.technology__image svg {
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.technology__image rect {
+  fill: #151515;
+}
+
+.technology__image path {
+  fill: none;
+  stroke: rgba(244, 242, 238, 0.42);
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
+}
+
+.technology__model-surface {
+  fill: rgba(244, 242, 238, 0.03);
+  stroke: rgba(244, 242, 238, 0.18);
+}
+
+.technology__model-accent {
+  stroke: var(--color-accent);
+  stroke-width: 1.5;
 }
 
 .technology__capabilities {
