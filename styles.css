@@ -7,6 +7,9 @@
   --color-text-secondary: #6B6B6B;
   --color-accent: #C8521E;
   --color-border: rgba(15, 15, 15, 0.08);
+  --color-border-strong: rgba(15, 15, 15, 0.14);
+  --color-media-wash: rgba(15, 15, 15, 0.08);
+  --filter-media: grayscale(0.16) saturate(0.82) contrast(1.08);
 
   --font-display: 'Inter', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
@@ -87,11 +90,18 @@ body {
   font-size: var(--text-body);
   font-weight: 400;
   line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "kern" 1, "liga" 1;
   text-rendering: geometricPrecision;
 }
 
-body:has([lang="he"]) [lang="he"] {
+[lang="he"] {
   font-family: var(--font-hebrew);
+}
+
+::selection {
+  color: var(--color-text-on-dark);
+  background: var(--color-accent);
 }
 
 img,
@@ -112,6 +122,13 @@ a {
 
 a:hover {
   color: var(--color-accent);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: 6px;
 }
 
 button,
@@ -175,6 +192,7 @@ h4 {
   margin-block-start: var(--space-element);
   font-size: clamp(2rem, 5vw, var(--text-h2));
   line-height: 1.02;
+  letter-spacing: -0.035em;
 }
 
 .section-title span,
@@ -186,6 +204,10 @@ h4 {
 
 .section-intro {
   max-inline-size: 900px;
+}
+
+.section-intro .caption + .section-title {
+  margin-block-start: var(--space-element);
 }
 
 .section-intro__body {
@@ -201,6 +223,7 @@ h4 {
   align-items: center;
   color: var(--color-text);
   font-weight: 500;
+  letter-spacing: -0.01em;
   line-height: 1.1;
 }
 
@@ -260,6 +283,10 @@ h4 {
   background: transparent;
   border-block-end: 1px solid transparent;
   transition: background-color var(--transition-base), border-color var(--transition-base), color var(--transition-base);
+}
+
+.site-header a {
+  opacity: 0.92;
 }
 
 .site-header.header--scrolled {
@@ -322,7 +349,8 @@ h4 {
 
 .hero__image {
   object-fit: cover;
-  filter: brightness(0.78) saturate(0.96);
+  object-position: center;
+  filter: brightness(0.72) saturate(0.88) contrast(1.04);
 }
 
 .hero__fade {
@@ -334,7 +362,7 @@ h4 {
   inset-block-end: 80px;
   inset-inline-start: var(--container-padding);
   z-index: 1;
-  max-inline-size: 1080px;
+  max-inline-size: min(1080px, calc(100vw - (var(--container-padding) * 2)));
 }
 
 .hero__caption {
@@ -353,6 +381,7 @@ h4 {
   margin-block-start: 32px;
   color: rgba(244, 242, 238, 0.75);
   font-size: var(--text-body-lg);
+  letter-spacing: -0.01em;
 }
 
 .hero__actions {
@@ -396,6 +425,8 @@ h4 {
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: 80px;
+  padding-block-start: 40px;
+  border-block-start: 1px solid var(--color-border);
 }
 
 .metrics__intro p:last-child {
@@ -426,7 +457,7 @@ h4 {
   color: var(--color-text);
   font-size: clamp(3rem, 6vw, var(--text-h1));
   font-weight: 500;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.055em;
   line-height: 1;
   white-space: nowrap;
 }
@@ -448,13 +479,30 @@ h4 {
   background: var(--color-bg);
 }
 
+.clients .container,
+.standards .container {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 32px;
+  align-items: start;
+  padding-block: 48px;
+  border-block: 1px solid var(--color-border);
+}
+
+.clients .caption,
+.standards .caption {
+  grid-column: 1 / span 3;
+}
+
 .typographic-list {
-  margin-block-start: 48px;
+  grid-column: 5 / -1;
+  margin-block-start: 0;
   color: rgba(15, 15, 15, 0.8);
   font-size: 18px;
   font-weight: 500;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.03em;
   line-height: 2;
+  text-transform: uppercase;
 }
 
 .typographic-list span {
@@ -470,7 +518,7 @@ h4 {
 .discipline-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 64px;
+  gap: 88px 96px;
   margin-block-start: var(--space-component);
 }
 
@@ -485,6 +533,7 @@ h4 {
   margin-block-start: 24px;
   font-size: var(--text-h3);
   line-height: 1.1;
+  letter-spacing: -0.025em;
 }
 
 .discipline-card p:not(.discipline-card__number) {
@@ -512,15 +561,24 @@ h4 {
 .featured-project__grid {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 32px;
+  gap: 64px 32px;
   align-items: center;
 }
 
 .featured-project__media {
+  position: relative;
   grid-column: 1 / span 7;
   aspect-ratio: 4 / 5;
   margin-inline-start: calc(var(--container-padding) * -1);
   overflow: hidden;
+}
+
+.featured-project__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--color-media-wash);
+  pointer-events: none;
 }
 
 .featured-project__media img,
@@ -532,14 +590,23 @@ h4 {
   object-fit: cover;
 }
 
+.featured-project__media img,
+.project-card__image img {
+  filter: var(--filter-media);
+  transition: filter var(--transition-base);
+}
+
 .featured-project__content {
   grid-column: 8 / span 5;
+  padding-block-start: 40px;
+  border-block-start: 1px solid var(--color-border-strong);
 }
 
 .featured-project__content h2 {
   margin-block-start: 32px;
   font-size: clamp(2.5rem, 5vw, var(--text-h2));
   line-height: 1.04;
+  letter-spacing: -0.035em;
 }
 
 .featured-project__meta,
@@ -581,6 +648,8 @@ h4 {
   grid-template-columns: 1fr auto;
   gap: 48px;
   align-items: center;
+  padding-block-start: 40px;
+  border-block-start: 1px solid var(--color-border);
 }
 
 .work__header .text-link {
@@ -632,6 +701,10 @@ h4 {
   background: rgba(15, 15, 15, 0.08);
 }
 
+.project-card:hover .project-card__image img {
+  filter: grayscale(0.16) saturate(0.82) contrast(1.08) brightness(0.92);
+}
+
 .project-card__image--wide {
   aspect-ratio: 16 / 10;
 }
@@ -643,6 +716,7 @@ h4 {
 .project-card h3,
 .project-card h4 {
   margin-block-start: 24px;
+  letter-spacing: -0.025em;
   transition: transform var(--transition-base);
 }
 
@@ -677,6 +751,12 @@ h4 {
   max-inline-size: var(--content-max);
   margin-inline: auto;
   padding-inline: var(--container-padding);
+}
+
+.technology .caption {
+  display: inline-flex;
+  padding-block-start: 40px;
+  border-block-start: 1px solid rgba(244, 242, 238, 0.16);
 }
 
 .technology h2 {
@@ -732,6 +812,8 @@ h4 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 96px;
   margin-block-start: 64px;
+  padding-block-start: 48px;
+  border-block-start: 1px solid rgba(244, 242, 238, 0.14);
 }
 
 .technology__capabilities p {
@@ -780,6 +862,8 @@ h4 {
   display: grid;
   grid-template-columns: repeat(10, minmax(0, 1fr));
   gap: 64px;
+  padding-block-start: 40px;
+  border-block-start: 1px solid var(--color-border);
 }
 
 .detail__content {
@@ -809,6 +893,7 @@ h4 {
   place-items: center;
   padding: 48px;
   background: var(--color-bg-subtle);
+  border: 1px solid rgba(15, 15, 15, 0.06);
 }
 
 .drawing__sheet svg {
@@ -853,6 +938,8 @@ h4 {
   display: flex;
   gap: 32px;
   margin-block-start: var(--space-component);
+  padding-block-start: 40px;
+  border-block-start: 1px solid var(--color-border);
 }
 
 .sector-card {
@@ -866,7 +953,7 @@ h4 {
 
 .sector-card svg {
   block-size: 80px;
-  stroke: rgba(15, 15, 15, 0.9);
+  stroke: rgba(15, 15, 15, 0.72);
   stroke-width: 1.5;
   fill: none;
 }
@@ -898,9 +985,9 @@ h4 {
 }
 
 .quote-section__mark {
-  block-size: 168px;
+  block-size: 132px;
   color: var(--color-accent);
-  font-size: 200px;
+  font-size: 168px;
   font-weight: 500;
   line-height: 0.8;
 }
@@ -952,6 +1039,8 @@ h4 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 64px;
   margin-block-start: 80px;
+  padding-block-start: 48px;
+  border-block-start: 1px solid var(--color-border);
 }
 
 .article-card:nth-child(n + 2) {
@@ -1073,6 +1162,8 @@ h4 {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: 32px;
+  padding-block-start: 40px;
+  border-block-start: 1px solid var(--color-border);
 }
 
 .site-footer__column {
@@ -1216,8 +1307,20 @@ h4 {
   .metrics__grid,
   .featured-project__grid,
   .detail__grid,
-  .work__header {
+  .work__header,
+  .clients .container,
+  .standards .container {
     grid-template-columns: 1fr;
+  }
+
+  .clients .caption,
+  .standards .caption,
+  .typographic-list {
+    grid-column: auto;
+  }
+
+  .typographic-list {
+    margin-block-start: 24px;
   }
 
   .metrics__list {
